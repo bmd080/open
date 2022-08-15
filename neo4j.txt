@@ -1,0 +1,129 @@
+docker run -d --name neo4j \
+-p 7474:7474 -p 7687:7687 \
+-v /Users/admin/neo4j/data:/data \
+-v /Users/admin/neo4j/logs:/logs \
+-v /Users/admin/neo4j/conf:/var/lib/neo4j/conf \
+-v /Users/admin/neo4j/import:/var/lib/neo4j/import \
+--env NEO4J_AUTH=neo4j/admin123 \
+neo4j
+
+http://localhost:7474/browser/
+
+CREATE (dept:Dept { deptno:10,dname:"Accounting",location:"Hyderabad" });
+
+
+CREATE (e:Customer{id:"1001",name:"Abc",dob:"01/10/1982"});
+CREATE (e:Customer{id:"1002",name:"Abd",dob:"02/10/1982"});
+CREATE (cc:CreditCard{id:"5001",number:"1234567890",cvv:"888",expiredate:"20/17"});
+
+MATCH (ct:Customer) RETURN ct.id,ct.name,ct.dob;
+
+MATCH (cc:CreditCard) RETURN cc.id,cc.number,cc.expiredate,cc.cvv;
+
+MATCH (ct:Customer),(cc:CreditCard) 
+WHERE ct.id = "1001" AND cc.id= "5001" 
+CREATE (ct)-[r:DO_SHOPPING_WITH{shopdate:"12/12/2014",price:55000}]->(cc) 
+RETURN r;
+
+
+MATCH (c:Customer) 
+WHERE c.id = "1002"
+DELETE c;
+
+MATCH (ct:Customer) RETURN ct;
+
+MATCH (cc:CreditCard)-[r]-(c:Customer) RETURN r;
+
+MATCH (cc:CreditCard)-[rel]-(c:Customer) 
+WHERE rel.price > 100000
+DELETE cc,c,rel;
+
+CREATE (book:Book {id:122,title:"Neo4j Tutorial",pages:340,price:250});
+
+MATCH (book:Book) RETURN book;
+
+MATCH (book { id:122 }) REMOVE book.price RETURN book;
+MATCH (bk { id:122 }) REMOVE bk.price RETURN bk;
+
+CREATE (m:Movie:Cinema:Film:Picture);
+
+MATCH (m:Movie) RETURN m;
+
+MATCH (m:Movie) REMOVE m:Picture;
+
+CREATE (dc:DebitCard{id:"6001",number:"600000000006",cvv:"666"});
+CREATE (dc:DebitCard{id:"8001",number:"800000000008",cvv:"888"});
+
+MATCH (dc:DebitCard) RETURN dc;
+
+MATCH (dc:DebitCard) SET dc.atm_pin = 3456 RETURN dc;
+
+MATCH (dc:DebitCard)
+WHERE dc.id = "8001"
+SET dc.atm_num = 1234
+RETURN dc;
+
+MATCH (dc:DebitCard)
+RETURN dc
+ORDER BY dc.id DESC;
+
+MATCH (n:CreditCard) RETURN n.id,n.number
+UNION
+MATCH (n:DebitCard) RETURN n.id,n.number;
+
+
+MATCH (cc:CreditCard) RETURN cc.id as id,cc.number as number
+UNION
+MATCH (dc:DebitCard) RETURN dc.id as id,dc.number as number;
+
+MATCH (cc:CreditCard) RETURN cc.id as id,cc.number as number
+UNION ALL
+MATCH (dc:DebitCard) RETURN dc.id as id,dc.number as number;
+
+MATCH (dc:DebitCard) RETURN dc LIMIT 1;
+MATCH (dc:DebitCard) RETURN dc SKIP 1 LIMIT 1;
+
+
+CREATE (p1:Profile1 {Id: 201401, Name:"Apple"});
+CREATE (p1:Profile1 {Id: 201401, Name:"Apple"});
+
+MATCH  (p1:Profile1) RETURN p1;
+
+MERGE (p2:Profile2{ Id: 201402, Name:"Nokia"});
+MERGE (p2:Profile2{ Id: 201402, Name:"Nokia"});
+
+MATCH  (p2:Profile2) RETURN p2;
+
+CREATE (e:Employee{id:1,name:"001",deptno:2});
+CREATE (e:Employee{id:2,name:"002",deptno:2});
+CREATE (e:Employee);
+
+MATCH (e:Employee) RETURN e;
+
+MATCH (e:Employee) 
+WHERE e.id IS NULL
+RETURN e.id,e.name,e.deptno;
+
+MATCH (e:Employee) 
+WHERE e.id IS NOT NULL
+RETURN e.id,e.name,e.deptno;
+
+MATCH (e:Employee) 
+WHERE e.id IN [1,2]
+RETURN e.id,e.name,e.sal,e.deptno;
+
+MATCH (e:Employee) RETURN COUNT(*);
+
+MATCH (e:Employee) 
+RETURN MAX(e.id),MIN(e.id);
+
+MATCH (e:Employee) 
+RETURN SUM(e.id),AVG(e.id);
+
+
+CREATE CONSTRAINT ON (cc:CreditCard)
+ASSERT cc.number IS UNIQUE;
+
+DROP CONSTRAINT ON (cc:CreditCard)
+ASSERT cc.number IS UNIQUE;
+

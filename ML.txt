@@ -1,0 +1,49 @@
+机器学习的实现路径
+
+1、数据工程
+非结构化数据（word，text，pdf），结构化数据（表格，关系型数据库等）
+ETL数据抽取、转换和加载
+数据处理，数据维度梳理，知识图谱的构建
+
+OCR 识别 处理
+
+数据湖（iceburg），数据仓库（clickhouse），数据流式处理（flink，spark）
+
+通过图神经网络对知识图谱小样本补全
+https://zhuanlan.zhihu.com/p/358119044
+
+2、特征工程
+使用机器学习方法，主成分分析等
+https://zhuanlan.zhihu.com/p/111296130
+
+3、算法工程
+xgboost：随机森林
+ML： 传统机器学习（KNN，K-MEAN）
+NLP：自然语言处理
+DNN：深度神经网络
+
+图神经网络GNNs 知识图谱
+
+一般会使用现有的SOTA模型去调参优化
+
+tensorflow pytorch
+
+深度神经网络模型用于评分卡模型
+https://blog.csdn.net/LuYi_WeiLin/article/details/88429879
+
+4、验证工程
+特征集，验证集，测试集
+评价标准：回召率 (Recall)，精确率 (Precision) ，F1-Score。而对话系统的评价标准以人工评价为主，以及BLEU和Perplexity。
+
+5、平台工程
+搭建服务平台，处理逻辑请求，包括统计、分布式架构等
+
+6、QA和语音客服
+NLP，基于sentence-bert模型的优化训练，语音转换和识别
+检索式、语义匹配（Q-Q/Q-A）、KBQA 三种方式
+
+基于向量空间的搜索和基于模式匹配的搜索
+
+
+
+
